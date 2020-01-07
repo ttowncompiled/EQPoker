@@ -41,6 +41,9 @@ module ScoreEngine
     end
 
     function _royal_flush_draw(cards)
+        if length(cards) < 5
+            return nothing
+        end
         straight_flush = _straight_flush_draw(cards)
         if straight_flush == nothing
             return nothing
@@ -52,6 +55,9 @@ module ScoreEngine
     end
 
     function _straight_flush_draw(cards)
+        if length(cards) < 5
+            return nothing
+        end
         straight = _straight_draw(cards)
         if straight == nothing
             return nothing
@@ -60,6 +66,9 @@ module ScoreEngine
     end
 
     function _quad_draw(cards)
+        if length(cards) < 5
+            return nothing
+        end
         i = 1
         while i+3 <= length(cards)
             if cards[i].rank == cards[i+1].rank && cards[i+1].rank == cards[i+2].rank && cards[i+2].rank == cards[i+3].rank
@@ -75,6 +84,9 @@ module ScoreEngine
     end
 
     function _flush_draw(cards)
+        if length(cards) < 5
+            return nothing
+        end
         i = 1
         while i+4 <= length(cards)
             if cards[i].suit == cards[i+1].suit && cards[i+1].suit == cards[i+2].suit && cards[i+2].suit == cards[i+3].suit && cards[i+3].suit == cards[i+4].suit
@@ -86,6 +98,9 @@ module ScoreEngine
     end
 
     function _straight_draw(cards)
+        if length(cards) < 5
+            return nothing
+        end
         i = 1
         while i+4 <= length(cards)
             if Int(cards[i].rank)-1 == Int(cards[i+1].rank) && Int(cards[i+1].rank)-1 == Int(cards[i+2].rank) && Int(cards[i+2].rank)-1 == Int(cards[i+3].rank) && Int(cards[i+3].rank)-1 == Int(cards[i+4].rank)
