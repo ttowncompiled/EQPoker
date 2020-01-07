@@ -72,7 +72,7 @@ module ScoreEngine
         i = 1
         while i+3 <= length(cards)
             if cards[i].rank == cards[i+1].rank && cards[i+1].rank == cards[i+2].rank && cards[i+2].rank == cards[i+3].rank
-                if i == 1
+                if i <= 2
                     return cards[1:5]
                 else
                     return vcat(cards[1:1], cards[i:(i+3)])
@@ -132,6 +132,42 @@ module ScoreEngine
         while i+4 <= length(cards)
             if Int(cards[i].rank)-1 == Int(cards[i+1].rank) && Int(cards[i+1].rank)-1 == Int(cards[i+2].rank) && Int(cards[i+2].rank)-1 == Int(cards[i+3].rank) && Int(cards[i+3].rank)-1 == Int(cards[i+4].rank)
                 return cards[i:(i+4)]
+            end
+            i += 1
+        end
+        return nothing
+    end
+
+    function _trip_draw(cards)
+        if length(cards) < 5
+            return nothing
+        end
+        i = 1
+        while i+2 <= length(cards)
+            if cards[i].rank == cards[i+1].rank && cards[i+1].rank == cards[i+2].rank
+                if i <= 3
+                    return cards[1:5]
+                else
+                    return vcat(cards[1:2], cards[i:(i+2)])
+                end
+            end
+            i += 1
+        end
+        return nothing
+    end
+
+    function _pair_draw(cards)
+        if length(cards) < 5
+            return nothing
+        end
+        i = 1
+        while i+1 <= length(cards)
+            if cards[i].rank == cards[i+1].rank
+                if i <= 4
+                    return cards[1:5]
+                else
+                    return vcat(cards[1:3], cards[i:(i+1)])
+                end
             end
             i += 1
         end
