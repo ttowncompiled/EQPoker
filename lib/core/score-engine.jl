@@ -72,10 +72,10 @@ module ScoreEngine
         i = 1
         while i+3 <= length(cards)
             if cards[i].rank == cards[i+1].rank && cards[i+1].rank == cards[i+2].rank && cards[i+2].rank == cards[i+3].rank
-                if i <= 2
+                if i == 1
                     return cards[1:5]
                 else
-                    return vcat(cards[1:1], cards[i:(i+3)])
+                    return vcat(cards[i:(i+3)], cards[1:1])
                 end
             end
             i += 1
@@ -97,7 +97,7 @@ module ScoreEngine
                     end
                     j += 1
                 end
-                j = i+2+1
+                j = i+3
                 while j+1 <= length(cards)
                     if cards[j].rank == cards[j+1].rank
                         return vcat(cards[i:(i+2)], cards[j:(j+1)])
@@ -145,10 +145,12 @@ module ScoreEngine
         i = 1
         while i+2 <= length(cards)
             if cards[i].rank == cards[i+1].rank && cards[i+1].rank == cards[i+2].rank
-                if i <= 3
+                if i == 1
                     return cards[1:5]
+                elseif i == 2
+                    return vcat(cards[2:4], cards[1:1], cards[5:5])
                 else
-                    return vcat(cards[1:2], cards[i:(i+2)])
+                    return vcat(cards[i:(i+2)], cards[1:2])
                 end
             end
             i += 1
@@ -191,15 +193,26 @@ module ScoreEngine
         i = 1
         while i+1 <= length(cards)
             if cards[i].rank == cards[i+1].rank
-                if i <= 4
+                if i == 1
                     return cards[1:5]
+                elseif i == 2
+                    return vcat(cards[2:3], cards[1:1], cards[4:5])
+                elseif i == 3
+                    return vcat(cards[3:4], cards[1:2], cards[5:5])
                 else
-                    return vcat(cards[1:3], cards[i:(i+1)])
+                    return vcat(cards[i:(i+1)], cards[1:3])
                 end
             end
             i += 1
         end
         return nothing
+    end
+
+    function _high_draw(cards)
+        if length(cards) < 5
+            return nothing
+        end
+        return cards[1:5]
     end
 
 end
