@@ -4,7 +4,9 @@ include("./lib/core/dealer.jl")
 
 using DelimitedFiles
 
-function main(num_players, trials)
+function main(args)
+    num_players = parse(Int, args[1])
+    trials = parse(Int, args[2])
     range_equity::Array{Float64, 2} = zeros(Float64, 13, 13)
     for i in 1:13
         for j in 1:13
@@ -55,5 +57,5 @@ function main(num_players, trials)
     writedlm("results.csv", range_equity, ",")
 end
 
-main(2, 1000)
+main(ARGS)
 
