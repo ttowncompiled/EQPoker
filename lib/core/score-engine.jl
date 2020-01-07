@@ -40,6 +40,25 @@ module ScoreEngine
         end
     end
 
+    function _royal_flush_draw(cards)
+        straight_flush = _straight_flush_draw(cards)
+        if straight_flush == nothing
+            return nothing
+        end
+        if straight_flush[1].rank == EQCore.Ranks.ACE
+            return straight_flush
+        end
+        return nothing
+    end
+
+    function _straight_flush_draw(cards)
+        straight = _straight_draw(cards)
+        if straight == nothing
+            return nothing
+        end
+        return _flush_draw(straight)
+    end
+
     function _flush_draw(cards)
         i = 1
         while i+4 <= length(cards)
