@@ -61,10 +61,19 @@ function compare(c1::Card, c2::Card, tie_break=false)
     end
 end
 
+struct Deck
+    cards::Vector{Card}
+end
+
 struct Hole
     playerID::Int
     card1::Card
     card2::Card
+end
+
+struct Player
+    playerID::Int
+    hole::Hole
 end
 
 struct Board
