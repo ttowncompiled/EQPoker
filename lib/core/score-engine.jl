@@ -156,6 +156,34 @@ module ScoreEngine
         return nothing
     end
 
+    function _dub_draw(cards)
+        if length(cards) < 5
+            return nothing
+        end
+        i = 1
+        while i+1 <= length(cards)
+            if cards[i].rank == cards[i+1].rank
+                j = i+2
+                while j+1 <= length(cards)
+                    if cards[j].rank == cards[j+1].rank
+                        if i == 1
+                            if j == 3
+                                return cards[1:5]
+                            else
+                                return vcat(cards[1:2], cards[j:(j+1)], cards[3:3])
+                            end
+                        else
+                            return vcat(cards[i:(i+1)], cards[j:(j+1)], cards[1:1])
+                        end
+                    end
+                    j += 1
+                end
+            end
+            i += 1
+        end
+        return nothing
+    end
+
     function _pair_draw(cards)
         if length(cards) < 5
             return nothing
