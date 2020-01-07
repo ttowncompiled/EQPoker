@@ -44,6 +44,27 @@ function score(hole::Hole, board::Board)
     return nothing
 end
 
+function compare_hands(hands::Hand...)
+    if length(hands) < 1
+        return nothing
+    end
+    if length(hands) == 1
+        return hands
+    end
+    best_hands::Vector{Hand} = hands[1:1]
+    i = 2
+    while i <= length(hands)
+        k = compare(hands[i], best_hands[1])
+        if k > 0
+            best_hands = hands[i:i]
+        elseif k == 0
+            append!(best_hands, hands[i])
+        end
+        i += 1
+    end
+    return best_hands
+end
+
 function _assemble_cards(hole::Hole, board::Board)
     cards = [
         hole.card1,
