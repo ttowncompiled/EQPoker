@@ -7,6 +7,47 @@ module ScoreEngine
     function score(hole::EQCore.Hole, board::EQCore.Board)
         cards::Array{EQCore.Card, 7} = _assemble_cards(hole, board)
         _sort_cards!(cards)
+        best_hand = _royal_flush_draw(cards)
+        if best_hand != nothing
+            return EQCore.Hand(hole.playerID, EQCore.Rankings.ROYAL, best_hand...)
+        end
+        best_hand = _straight_flush_draw(cards)
+        if best_hand != nothing
+            return EQCore.Hand(hole.playerID, EQCore.Rankings.SFLUSH, best_hand...)
+        end
+        best_hand = _quad_draw(cards)
+        if best_hand != nothing
+            return EQCore.Hand(hole.playerID, EQCore.Rankings.QUAD, best_hand...)
+        end
+        best_hand = _full_draw(cards)
+        if best_hand != nothing
+            return EQCore.Hand(hole.playerID, EQCore.Rankings.FULL, best_hand...)
+        end
+        best_hand = _flush_draw(cards)
+        if best_hand != nothing
+            return EQCore.Hand(hole.playerID, EQCore.Rankings.FLUSH, best_hand...)
+        end
+        best_hand = _straight_draw(cards)
+        if best_hand != nothing
+            return EQCore.Hand(hole.playerID, EQCore.Rankings.STRAIGHT, best_hand...)
+        end
+        best_hand = _trip_draw(cards)
+        if best_hand != nothing
+            return EQCore.Hand(hole.playerID, EQCore.Rankings.TRIP, best_hand...)
+        end
+        best_hand = _dubs_draw(cards)
+        if best_hand != nothing
+            return EQCore.Hand(hole.playerID, EQCore.Rankings.DUBS, best_hand...)
+        end
+        best_hand = _pair_draw(cards)
+        if best_hand != nothing
+            return EQCore.Hand(hole.playerID, EQCore.Rankings.PAIR, best_hand...)
+        end
+        best_hand = _high_draw(cards)
+        if best_hand != nothing
+            return EQCore.Hand(hole.playerID, EQCore.Rankings.HIGH, best_hand...)
+        end
+        return nothing
     end
 
     function _assemble_cards(hole::EQCore.Hole, board::EQCore.Board)
@@ -86,7 +127,7 @@ module ScoreEngine
     function _full_draw(cards)
         if length(cards) < 5
             return nothing
-        end'
+        end
         i = 1
         while i+2 <= length(cards)
             if cards[i].rank == cards[i+1].rank && cards[i+1].rank == cards[i+2].rank
@@ -158,7 +199,7 @@ module ScoreEngine
         return nothing
     end
 
-    function _dub_draw(cards)
+    function _dubs_draw(cards)
         if length(cards) < 5
             return nothing
         end
