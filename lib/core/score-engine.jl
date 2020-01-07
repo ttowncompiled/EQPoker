@@ -2,7 +2,7 @@ module ScoreEngine
 
     include("eq-core.jl")
 
-    export _assemble_cards, _sort_cards!
+    export score, _assemble_cards, _sort_cards!
 
     function score(hole::EQCore.Hole, board::EQCore.Board)
         cards::Array{EQCore.Card, 7} = _assemble_cards(hole, board)
