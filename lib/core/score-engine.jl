@@ -58,7 +58,7 @@ function compare_hands(hands::Hand...)
         if k > 0
             best_hands = hands[i:i]
         elseif k == 0
-            append!(best_hands, hands[i])
+            push!(best_hands, hands[i])
         end
         i += 1
     end
