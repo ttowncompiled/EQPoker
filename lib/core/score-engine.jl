@@ -83,6 +83,33 @@ module ScoreEngine
         return nothing
     end
 
+    function _full_draw(cards)
+        if length(cards) < 5
+            return nothing
+        end'
+        i = 1
+        while i+2 <= length(cards)
+            if cards[i].rank == cards[i+1].rank && cards[i+1].rank == cards[i+2].rank
+                j = 1
+                while j+1 < i
+                    if cards[j].rank == cards[j+1].rank
+                        return vcat(cards[i:(i+2)], cards[j:(j+1)])
+                    end
+                    j += 1
+                end
+                j = i+2+1
+                while j+1 <= length(cards)
+                    if cards[j].rank == cards[j+1].rank
+                        return vcat(cards[i:(i+2)], cards[j:(j+1)])
+                    end
+                    j += 1
+                end
+            end
+            i += 1
+        end
+        return nothing
+    end
+
     function _flush_draw(cards)
         if length(cards) < 5
             return nothing
