@@ -40,6 +40,17 @@ module ScoreEngine
         end
     end
 
+    function _flush_draw(cards)
+        i = 1
+        while i+4 <= length(cards)
+            if cards[i].suit == cards[i+1].suit && cards[i+1].suit == cards[i+2].suit && cards[i+2].suit == cards[i+3].suit && cards[i+3].suit == cards[i+4].suit
+                return cards[i:(i+4)]
+            end
+            i += 1
+        end
+        return nothing
+    end
+
     function _straight_draw(cards)
         i = 1
         while i+4 <= length(cards)
