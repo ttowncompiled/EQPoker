@@ -1,45 +1,45 @@
-function score(hole::Hole, board::Board)
-    cards::Array{Card} = _assemble_cards(hole, board)
+function score(player::Player, board::Board)
+    cards::Array{Card} = _assemble_cards(player.hole, board)
     _sort_cards!(cards)
     best_hand = _royal_flush_draw(cards)
     if best_hand != nothing
-        return Hand(hole.playerID, Rankings.ROYAL, best_hand...)
+        return Hand(player.playerID, Rankings.ROYAL, best_hand...)
     end
     best_hand = _straight_flush_draw(cards)
     if best_hand != nothing
-        return Hand(hole.playerID, Rankings.SFLUSH, best_hand...)
+        return Hand(player.playerID, Rankings.SFLUSH, best_hand...)
     end
     best_hand = _quad_draw(cards)
     if best_hand != nothing
-        return Hand(hole.playerID, Rankings.QUAD, best_hand...)
+        return Hand(player.playerID, Rankings.QUAD, best_hand...)
     end
     best_hand = _full_draw(cards)
     if best_hand != nothing
-        return Hand(hole.playerID, Rankings.FULL, best_hand...)
+        return Hand(player.playerID, Rankings.FULL, best_hand...)
     end
     best_hand = _flush_draw(cards)
     if best_hand != nothing
-        return Hand(hole.playerID, Rankings.FLUSH, best_hand...)
+        return Hand(player.playerID, Rankings.FLUSH, best_hand...)
     end
     best_hand = _straight_draw(cards)
     if best_hand != nothing
-        return Hand(hole.playerID, Rankings.STRAIGHT, best_hand...)
+        return Hand(player.playerID, Rankings.STRAIGHT, best_hand...)
     end
     best_hand = _trip_draw(cards)
     if best_hand != nothing
-        return Hand(hole.playerID, Rankings.TRIP, best_hand...)
+        return Hand(player.playerID, Rankings.TRIP, best_hand...)
     end
     best_hand = _dubs_draw(cards)
     if best_hand != nothing
-        return Hand(hole.playerID, Rankings.DUBS, best_hand...)
+        return Hand(player.playerID, Rankings.DUBS, best_hand...)
     end
     best_hand = _pair_draw(cards)
     if best_hand != nothing
-        return Hand(hole.playerID, Rankings.PAIR, best_hand...)
+        return Hand(player.playerID, Rankings.PAIR, best_hand...)
     end
     best_hand = _high_draw(cards)
     if best_hand != nothing
-        return Hand(hole.playerID, Rankings.HIGH, best_hand...)
+        return Hand(player.playerID, Rankings.HIGH, best_hand...)
     end
     return nothing
 end
@@ -51,12 +51,12 @@ function compare_hands(hands::Hand...)
     if length(hands) == 1
         return hands
     end
-    best_hands::Vector{Hand} = hands[1:1]
+    best_hands::Vector{Hand} = [hands[1]]
     i = 2
     while i <= length(hands)
         k = compare(hands[i], best_hands[1])
         if k > 0
-            best_hands = hands[i:i]
+            best_hands = [hands[i]]
         elseif k == 0
             push!(best_hands, hands[i])
         end

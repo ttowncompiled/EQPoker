@@ -1,5 +1,6 @@
 module Ranks
     @enum Rank begin
+        NULL=0
         TWO=2
         THREE=3
         FOUR=4
@@ -18,6 +19,7 @@ end
 
 module Suits
     @enum Suit begin
+        NULL=0
         CLUBS=1
         DIAMONDS=2
         HEARTS=3
@@ -65,7 +67,7 @@ struct Deck
     cards::Vector{Card}
 end
 
-struct Hole
+mutable struct Hole
     playerID::Int
     card1::Card
     card2::Card
@@ -76,7 +78,7 @@ struct Player
     hole::Hole
 end
 
-struct Board
+mutable struct Board
     flop1::Card
     flop2::Card
     flop3::Card
@@ -84,7 +86,7 @@ struct Board
     river::Card
 end
 
-struct Hand
+mutable struct Hand
     playerID::Int
     ranking::Rankings.Ranking
     card1::Card
