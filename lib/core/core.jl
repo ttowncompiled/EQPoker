@@ -2,6 +2,11 @@
 
 module Core
 
+    export struct Card
+        value
+        suit
+    end
+
     export struct Hole
         playerID::Int
         card1
