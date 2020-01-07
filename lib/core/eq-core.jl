@@ -1,5 +1,3 @@
-#!/bin/julia
-
 module EQCore
 
     export Ranks, Suits, Rankings, Card, compare, Hole, Board, Hand
