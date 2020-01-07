@@ -2,7 +2,7 @@
 
 module EQCore
 
-    export Ranks, Suits, Card, Hole, Board
+    export Ranks, Suits, Card, compare, Hole, Board
 
     module Ranks
         @enum Rank begin
@@ -34,6 +34,22 @@ module EQCore
     struct Card
         rank::Ranks.Rank
         suit::Suits.Suit
+    end
+
+    function compare(c1::Card, c2::Card, tie_break=false)
+        if c1.rank > c2.rank
+            1
+        elseif c1.rank < c2.rank
+            -1
+        elseif ! tie_break
+            0
+        elseif c1.suit > c2.suit
+            1
+        elseif c1.suit < c2.suit
+            -1
+        else
+            0
+        end
     end
 
     struct Hole
