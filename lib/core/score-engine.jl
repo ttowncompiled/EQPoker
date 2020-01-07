@@ -75,7 +75,7 @@ function _sort_cards!(cards::Array{Card})
     end
 end
 
-function _royal_flush_draw(cards)
+function _royal_flush_draw(cards::Array{Card})
     if length(cards) < 5
         return nothing
     end
@@ -89,7 +89,7 @@ function _royal_flush_draw(cards)
     return nothing
 end
 
-function _straight_flush_draw(cards)
+function _straight_flush_draw(cards::Array{Card})
     if length(cards) < 5
         return nothing
     end
@@ -100,7 +100,7 @@ function _straight_flush_draw(cards)
     return _flush_draw(straight)
 end
 
-function _quad_draw(cards)
+function _quad_draw(cards::Array{Card})
     if length(cards) < 5
         return nothing
     end
@@ -118,7 +118,7 @@ function _quad_draw(cards)
     return nothing
 end
 
-function _full_draw(cards)
+function _full_draw(cards::Array{Card})
     if length(cards) < 5
         return nothing
     end
@@ -145,7 +145,7 @@ function _full_draw(cards)
     return nothing
 end
 
-function _flush_draw(cards)
+function _flush_draw(cards::Array{Card})
     if length(cards) < 5
         return nothing
     end
@@ -159,7 +159,7 @@ function _flush_draw(cards)
     return nothing
 end
 
-function _straight_draw(cards)
+function _straight_draw(cards::Array{Card})
     if length(cards) < 5
         return nothing
     end
@@ -173,7 +173,7 @@ function _straight_draw(cards)
     return nothing
 end
 
-function _trip_draw(cards)
+function _trip_draw(cards::Array{Card})
     if length(cards) < 5
         return nothing
     end
