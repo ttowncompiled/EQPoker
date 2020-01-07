@@ -2,7 +2,7 @@
 
 module EQCore
 
-    export Ranks, Suits, Card, compare, Hole, Board
+    export Ranks, Suits, Rankings, Card, compare, Hole, Board, Hand
 
     module Ranks
         @enum Rank begin
@@ -28,6 +28,21 @@ module EQCore
             DIAMONDS=2
             HEARTS=3
             SPADES=4
+        end
+    end
+
+    module Rankings
+        @enum Ranking begin
+            HIGH=1
+            PAIR=2
+            DUBS=3
+            TRIP=4
+            STRAIGHT=5
+            FLUSH=6
+            FULL=7
+            QUAD=8
+            SFLUSH=9
+            ROYAL=10
         end
     end
 
@@ -64,6 +79,16 @@ module EQCore
         flop3::Card
         turn::Card
         river::Card
+    end
+
+    struct Hand
+        playerID::Int
+        ranking::Rankings.Ranking
+        card1::Card
+        card2::Card
+        card3::Card
+        card4::Card
+        card5::Card
     end
 
 end
