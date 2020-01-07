@@ -59,6 +59,21 @@ module ScoreEngine
         return _flush_draw(straight)
     end
 
+    function _quad_draw(cards)
+        i = 1
+        while i+3 <= length(cards)
+            if cards[i].rank == cards[i+1].rank && cards[i+1].rank == cards[i+2].rank && cards[i+2].rank == cards[i+3].rank
+                if i == 1
+                    return cards[1:5]
+                else
+                    return vcat(cards[1:1], cards[i:(i+3)])
+                end
+            end
+            i += 1
+        end
+        return nothing
+    end
+
     function _flush_draw(cards)
         i = 1
         while i+4 <= length(cards)
