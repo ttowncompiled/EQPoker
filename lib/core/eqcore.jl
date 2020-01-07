@@ -2,7 +2,7 @@
 
 module EQCore
 
-    export Ranks, Suits, Card, Hole
+    export Ranks, Suits, Card, Hole, Board
 
     module Ranks
         @enum Rank begin
@@ -40,6 +40,14 @@ module EQCore
         playerID::Int
         card1::Card
         card2::Card
+    end
+
+    struct Board
+        flop1::Card
+        flop2::Card
+        flop3::Card
+        turn::Card
+        river::Card
     end
 
 end
