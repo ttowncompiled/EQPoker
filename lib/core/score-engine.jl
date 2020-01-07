@@ -40,5 +40,16 @@ module ScoreEngine
         end
     end
 
+    function _straight_draw(cards)
+        i = 1
+        while i+4 <= length(cards)
+            if Int(cards[i].rank)-1 == Int(cards[i+1].rank) && Int(cards[i+1].rank)-1 == Int(cards[i+2].rank) && Int(cards[i+2].rank)-1 == Int(cards[i+3].rank) && Int(cards[i+3].rank)-1 == Int(cards[i+4].rank)
+                return cards[i:(i+4)]
+            end
+            i += 1
+        end
+        return nothing
+    end
+
 end
 
