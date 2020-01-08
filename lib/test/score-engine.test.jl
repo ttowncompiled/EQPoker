@@ -82,6 +82,8 @@ function test_four_of_a_kind()
         Card(Ranks.JACK, Suits.CLUBS),
         Card(Ranks.TEN, Suits.CLUBS),
         Card(Ranks.TEN, Suits.HEARTS),
+        Card(Ranks.NINE, Suits.SPADES),
+        Card(Ranks.TWO, Suits.CLUBS)
     ]
     best_cards = [
         Card(Ranks.KING, Suits.SPADES),
@@ -107,36 +109,232 @@ end
 
 function test_full_house()
     failing = 0
+    cards = [
+        Card(Ranks.ACE, Suits.SPADES),
+        Card(Ranks.KING, Suits.SPADES),
+        Card(Ranks.KING, Suits.DIAMONDS),
+        Card(Ranks.KING, Suits.CLUBS),
+        Card(Ranks.QUEEN, Suits.CLUBS),
+        Card(Ranks.JACK, Suits.CLUBS),
+        Card(Ranks.TEN, Suits.HEARTS),
+        Card(Ranks.TEN, Suits.CLUBS),
+        Card(Ranks.TWO, Suits.CLUBS),
+        Card(Ranks.NINE, Suits.HEARTS)
+    ]
+    best_cards = [
+        Card(Ranks.KING, Suits.SPADES),
+        Card(Ranks.KING, Suits.DIAMONDS),
+        Card(Ranks.KING, Suits.CLUBS),
+        Card(Ranks.TEN, Suits.HEARTS),
+        Card(Ranks.TEN, Suits.CLUBS)
+    ]
+    full_house = _full_draw(cards)
+    if ! expect(full_house, best_cards, desc="ERROR: match full house")
+        failing += 1
+    end
+    player = Player(0, Hole(0, Card(Ranks.KING, Suits.SPADES), Card(Ranks.KING, Suits.CLUBS)))
+    board = Board(Card(Ranks.KING, Suits.DIAMONDS), Card(Ranks.NINE, Suits.CLUBS), Card(Ranks.TEN, Suits.CLUBS), Card(Ranks.QUEEN, Suits.CLUBS), Card(Ranks.TEN, Suits.HEARTS))
+    hand = score(player, board)
+    best_hand = Hand(0, Rankings.FULL, best_cards...)
+    if ! expect(hand, best_hand, desc="ERROR: score full house")
+        failing += 1
+    end
     return failing
 end
 
 function test_flush()
     failing = 0
+    cards = [
+        Card(Ranks.ACE, Suits.SPADES),
+        Card(Ranks.KING, Suits.CLUBS),
+        Card(Ranks.QUEEN, Suits.CLUBS),
+        Card(Ranks.JACK, Suits.CLUBS),
+        Card(Ranks.TEN, Suits.HEARTS),
+        Card(Ranks.TEN, Suits.CLUBS),
+        Card(Ranks.TEN, Suits.SPADES),
+        Card(Ranks.TWO, Suits.CLUBS),
+        Card(Ranks.NINE, Suits.HEARTS)
+    ]
+    best_cards = [
+        Card(Ranks.KING, Suits.CLUBS),
+        Card(Ranks.QUEEN, Suits.CLUBS),
+        Card(Ranks.JACK, Suits.CLUBS),
+        Card(Ranks.TEN, Suits.CLUBS),
+        Card(Ranks.TWO, Suits.CLUBS)
+    ]
+    flush = _flush_draw(cards)
+    if ! expect(flush, best_cards, desc="ERROR: match flush")
+        failing += 1
+    end
+    player = Player(0, Hole(0, Card(Ranks.TWO, Suits.CLUBS), Card(Ranks.KING, Suits.CLUBS)))
+    board = Board(Card(Ranks.KING, Suits.DIAMONDS), Card(Ranks.NINE, Suits.HEARTS), Card(Ranks.TEN, Suits.CLUBS), Card(Ranks.QUEEN, Suits.CLUBS), Card(Ranks.JACK, Suits.CLUBS))
+    hand = score(player, board)
+    best_hand = Hand(0, Rankings.FLUSH, best_cards...)
+    if ! expect(hand, best_hand, desc="ERROR: score flush")
+        failing += 1
+    end
     return failing
 end
 
 function test_straight()
     failing = 0
+    cards = [
+        Card(Ranks.ACE, Suits.SPADES),
+        Card(Ranks.KING, Suits.CLUBS),
+        Card(Ranks.QUEEN, Suits.CLUBS),
+        Card(Ranks.JACK, Suits.CLUBS),
+        Card(Ranks.TEN, Suits.SPADES),
+        Card(Ranks.TEN, Suits.HEARTS),
+        Card(Ranks.TEN, Suits.CLUBS),
+        Card(Ranks.NINE, Suits.HEARTS)
+    ]
+    best_cards = [
+        Card(Ranks.ACE, Suits.SPADES),
+        Card(Ranks.KING, Suits.CLUBS),
+        Card(Ranks.QUEEN, Suits.CLUBS),
+        Card(Ranks.JACK, Suits.CLUBS),
+        Card(Ranks.TEN, Suits.SPADES),
+    ]
+    straight = _straight_draw(cards)
+    if ! expect(straight, best_cards, desc="ERROR: match straight")
+        failing += 1
+    end
+    player = Player(0, Hole(0, Card(Ranks.ACE, Suits.SPADES), Card(Ranks.KING, Suits.CLUBS)))
+    board = Board(Card(Ranks.TEN, Suits.SPADES), Card(Ranks.NINE, Suits.HEARTS), Card(Ranks.TEN, Suits.SPADES), Card(Ranks.QUEEN, Suits.CLUBS), Card(Ranks.JACK, Suits.CLUBS))
+    hand = score(player, board)
+    best_hand = Hand(0, Rankings.STRAIGHT, best_cards...)
+    if ! expect(hand, best_hand, desc="ERROR: score straight")
+        failing += 1
+    end
     return failing
 end
 
 function test_three_of_a_kind()
     failing = 0
+    cards = [
+        Card(Ranks.KING, Suits.CLUBS),
+        Card(Ranks.QUEEN, Suits.CLUBS),
+        Card(Ranks.JACK, Suits.CLUBS),
+        Card(Ranks.TEN, Suits.SPADES),
+        Card(Ranks.TEN, Suits.HEARTS),
+        Card(Ranks.TEN, Suits.CLUBS),
+        Card(Ranks.TWO, Suits.HEARTS)
+    ]
+    best_cards = [
+        Card(Ranks.TEN, Suits.SPADES),
+        Card(Ranks.TEN, Suits.HEARTS),
+        Card(Ranks.TEN, Suits.CLUBS),
+        Card(Ranks.KING, Suits.CLUBS),
+        Card(Ranks.QUEEN, Suits.CLUBS),
+    ]
+    trip = _trip_draw(cards)
+    if ! expect(trip, best_cards, desc="ERROR: match three-of-a-kind")
+        failing += 1
+    end
+    player = Player(0, Hole(0, Card(Ranks.TEN, Suits.CLUBS), Card(Ranks.KING, Suits.CLUBS)))
+    board = Board(Card(Ranks.TEN, Suits.SPADES), Card(Ranks.TWO, Suits.HEARTS), Card(Ranks.TEN, Suits.HEARTS), Card(Ranks.QUEEN, Suits.CLUBS), Card(Ranks.JACK, Suits.CLUBS))
+    hand = score(player, board)
+    best_hand = Hand(0, Rankings.TRIP, best_cards...)
+    if ! expect(hand, best_hand, desc="ERROR: score three-of-a-kind")
+        failing += 1
+    end
     return failing
 end
 
 function test_two_pair()
     failing = 0
+    cards = [
+        Card(Ranks.KING, Suits.SPADES),
+        Card(Ranks.KING, Suits.CLUBS),
+        Card(Ranks.QUEEN, Suits.CLUBS),
+        Card(Ranks.JACK, Suits.CLUBS),
+        Card(Ranks.TEN, Suits.SPADES),
+        Card(Ranks.TEN, Suits.HEARTS),
+        Card(Ranks.TWO, Suits.HEARTS)
+    ]
+    best_cards = [
+        Card(Ranks.KING, Suits.SPADES),
+        Card(Ranks.KING, Suits.CLUBS),
+        Card(Ranks.TEN, Suits.SPADES),
+        Card(Ranks.TEN, Suits.HEARTS),
+        Card(Ranks.QUEEN, Suits.CLUBS),
+    ]
+    dubs = _dubs_draw(cards)
+    if ! expect(dubs, best_cards, desc="ERROR: match two-pair")
+        failing += 1
+    end
+    player = Player(0, Hole(0, Card(Ranks.KING, Suits.SPADES), Card(Ranks.KING, Suits.CLUBS)))
+    board = Board(Card(Ranks.TEN, Suits.SPADES), Card(Ranks.TWO, Suits.HEARTS), Card(Ranks.TEN, Suits.HEARTS), Card(Ranks.QUEEN, Suits.CLUBS), Card(Ranks.JACK, Suits.CLUBS))
+    hand = score(player, board)
+    best_hand = Hand(0, Rankings.DUBS, best_cards...)
+    if ! expect(hand, best_hand, desc="ERROR: score two-pair")
+        failing += 1
+    end
     return failing
 end
 
 function test_pair()
     failing = 0
+    cards = [
+        Card(Ranks.KING, Suits.SPADES),
+        Card(Ranks.QUEEN, Suits.CLUBS),
+        Card(Ranks.JACK, Suits.CLUBS),
+        Card(Ranks.TEN, Suits.SPADES),
+        Card(Ranks.TEN, Suits.HEARTS),
+        Card(Ranks.FOUR, Suits.DIAMONDS),
+        Card(Ranks.TWO, Suits.HEARTS)
+    ]
+    best_cards = [
+        Card(Ranks.TEN, Suits.SPADES),
+        Card(Ranks.TEN, Suits.HEARTS),
+        Card(Ranks.KING, Suits.SPADES),
+        Card(Ranks.QUEEN, Suits.CLUBS),
+        Card(Ranks.JACK, Suits.CLUBS)
+    ]
+    pair = _pair_draw(cards)
+    if ! expect(pair, best_cards, desc="ERROR: match pair")
+        failing += 1
+    end
+    player = Player(0, Hole(0, Card(Ranks.KING, Suits.SPADES), Card(Ranks.FOUR, Suits.DIAMONDS)))
+    board = Board(Card(Ranks.TEN, Suits.SPADES), Card(Ranks.TWO, Suits.HEARTS), Card(Ranks.TEN, Suits.HEARTS), Card(Ranks.QUEEN, Suits.CLUBS), Card(Ranks.JACK, Suits.CLUBS))
+    hand = score(player, board)
+    best_hand = Hand(0, Rankings.PAIR, best_cards...)
+    if ! expect(hand, best_hand, desc="ERROR: score pair")
+        failing += 1
+    end
     return failing
 end
 
 function test_high_card()
     failing = 0
+    cards = [
+        Card(Ranks.KING, Suits.SPADES),
+        Card(Ranks.QUEEN, Suits.CLUBS),
+        Card(Ranks.JACK, Suits.CLUBS),
+        Card(Ranks.TEN, Suits.HEARTS),
+        Card(Ranks.SEVEN, Suits.HEARTS),
+        Card(Ranks.FOUR, Suits.DIAMONDS),
+        Card(Ranks.TWO, Suits.HEARTS)
+    ]
+    best_cards = [
+        Card(Ranks.KING, Suits.SPADES),
+        Card(Ranks.QUEEN, Suits.CLUBS),
+        Card(Ranks.JACK, Suits.CLUBS),
+        Card(Ranks.TEN, Suits.HEARTS),
+        Card(Ranks.SEVEN, Suits.HEARTS)
+    ]
+    high = _high_draw(cards)
+    if ! expect(high, best_cards, desc="ERROR: match high card")
+        failing += 1
+    end
+    player = Player(0, Hole(0, Card(Ranks.KING, Suits.SPADES), Card(Ranks.FOUR, Suits.DIAMONDS)))
+    board = Board(Card(Ranks.SEVEN, Suits.HEARTS), Card(Ranks.TWO, Suits.HEARTS), Card(Ranks.TEN, Suits.HEARTS), Card(Ranks.QUEEN, Suits.CLUBS), Card(Ranks.JACK, Suits.CLUBS))
+    hand = score(player, board)
+    best_hand = Hand(0, Rankings.HIGH, best_cards...)
+    if ! expect(hand, best_hand, desc="ERROR: score high card")
+        failing += 1
+    end
+
     return failing
 end
 
@@ -205,6 +403,13 @@ function run_tests()
     failing += test_royal_flush()
     failing += test_straight_flush()
     failing += test_four_of_a_kind()
+    failing += test_full_house()
+    failing += test_flush()
+    failing += test_straight()
+    failing += test_three_of_a_kind()
+    failing += test_two_pair()
+    failing += test_pair()
+    failing += test_high_card()
     println("Done!")
     if failing == 0
         println("All tests passing!")
