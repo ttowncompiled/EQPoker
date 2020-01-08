@@ -7,11 +7,16 @@ function generate_deck()
             push!(cards, Card(Ranks.Rank(j), Suits.Suit(i)))
         end
     end
-    return Deck(cards)
+    return Deck(cards, 1)
 end
 
 function predeal_shuffle!(deck::Deck)
     Random.shuffle!(deck.cards)
+end
+
+function reshuffle!(deck::Deck)
+    Random.shuffle!(deck.cards)
+    deck.top = 1
 end
 
 function deal!(deck::Deck, players::Player...)
@@ -49,6 +54,8 @@ function _burn!(deck::Deck)
 end
 
 function _pop_deck!(deck::Deck)
-    pop!(deck.cards)
+    card = deck.cards[deck.top]
+    deck.top += 1
+    return card
 end
 
