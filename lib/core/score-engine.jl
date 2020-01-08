@@ -83,7 +83,7 @@ function _sort_cards!(cards::Array{Card})
     while i <= 7
         j = i
         while j > 1
-            if compare(cards[j], cards[j-1], true) > 0
+            if compare(cards[j], cards[j-1], tie_break=true) > 0
                 tmp = cards[j]
                 cards[j] = cards[j-1]
                 cards[j-1] = tmp
@@ -114,11 +114,47 @@ function _straight_flush_draw(cards::Array{Card})
     if length(cards) < 5
         return nothing
     end
-    straight = _straight_draw(cards)
-    if straight == nothing
-        return nothing
+    clubs::Array{Card} = []
+    diamonds::Array{Card} = []
+    hearts::Array{Card} = []
+    spades::Array{Card} = []
+    for card in cards
+        if card.suit == Suits.CLUBS
+            push!(clubs, card)
+        elseif card.suit == Suits.DIAMONDS
+            push!(diamonds, card)
+        elseif card.suit == Suits.HEARTS
+            push!(hearts, card)
+        elseif card.suit == Suits.SPADES
+            push!(spades, card)
+        end
     end
-    return _flush_draw(straight)
+    if length(spades) >= 5
+        straight = _straight_draw(spades)
+        if straight != nothing
+            return straight
+        end
+    end
+    if length(hearts) >= 5
+        straight = _straight_draw(hearts)
+        if straight != nothing
+            return straight
+        end
+    end
+    if length(diamonds) >= 5
+        straight = _straight_draw(diamonds)
+        if straight != nothing
+            return straight
+        end
+    end
+    if length(clubs) >= 5
+        straight = _straight_draw(clubs)
+        if straight != nothing
+            return straight
+        end
+    end
+    return nothing
+
 end
 
 function _quad_draw(cards::Array{Card})
@@ -170,12 +206,32 @@ function _flush_draw(cards::Array{Card})
     if length(cards) < 5
         return nothing
     end
-    i = 1
-    while i+4 <= length(cards)
-        if cards[i].suit == cards[i+1].suit && cards[i+1].suit == cards[i+2].suit && cards[i+2].suit == cards[i+3].suit && cards[i+3].suit == cards[i+4].suit
-            return cards[i:(i+4)]
+    clubs::Array{Card} = []
+    diamonds::Array{Card} = []
+    hearts::Array{Card} = []
+    spades::Array{Card} = []
+    for card in cards
+        if card.suit == Suits.CLUBS
+            push!(clubs, card)
+        elseif card.suit == Suits.DIAMONDS
+            push!(diamonds, card)
+        elseif card.suit == Suits.HEARTS
+            push!(hearts, card)
+        elseif card.suit == Suits.SPADES
+            push!(spades, card)
         end
-        i += 1
+    end
+    if length(spades) >= 5
+        return spades[1:5]
+    end
+    if length(hearts) >= 5
+        return hearts[1:5]
+    end
+    if length(diamonds) >= 5
+        return diamonds[1:5]
+    end
+    if length(clubs) >= 5
+        return clubs[1:5]
     end
     return nothing
 end
@@ -186,8 +242,16 @@ function _straight_draw(cards::Array{Card})
     end
     i = 1
     while i+4 <= length(cards)
-        if Int(cards[i].rank)-1 == Int(cards[i+1].rank) && Int(cards[i+1].rank)-1 == Int(cards[i+2].rank) && Int(cards[i+2].rank)-1 == Int(cards[i+3].rank) && Int(cards[i+3].rank)-1 == Int(cards[i+4].rank)
-            return cards[i:(i+4)]
+        straight::Array{Card} = [cards[i]]
+        j = i+1
+        while length(straight) < 5 && j <= length(cards)
+            if Int(straight[length(straight)].rank)-1 == Int(cards[j].rank)
+                push!(straight, cards[j])
+            end
+            j += 1
+        end
+        if length(straight) >= 5
+            return straight[1:5]
         end
         i += 1
     end
