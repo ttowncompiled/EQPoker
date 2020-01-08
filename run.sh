@@ -8,4 +8,5 @@ julia EQPoker.jl 6 1000000 results/equity-six.csv
 julia EQPoker.jl 7 1000000 results/equity-seven.csv
 julia EQPoker.jl 8 1000000 results/equity-eight.csv
 julia EQPoker.jl 9 1000000 results/equity-nine.csv
+zip -r results.zip results/
 
