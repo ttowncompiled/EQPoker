@@ -37,11 +37,71 @@ end
 
 function test_straight_flush()
     failing = 0
+    cards = [
+        Card(Ranks.ACE, Suits.SPADES),
+        Card(Ranks.KING, Suits.CLUBS),
+        Card(Ranks.KING, Suits.DIAMONDS),
+        Card(Ranks.KING, Suits.HEARTS),
+        Card(Ranks.KING, Suits.SPADES),
+        Card(Ranks.QUEEN, Suits.CLUBS),
+        Card(Ranks.JACK, Suits.CLUBS),
+        Card(Ranks.TEN, Suits.CLUBS),
+        Card(Ranks.TEN, Suits.HEARTS),
+        Card(Ranks.NINE, Suits.CLUBS)
+    ]
+    best_cards = [
+        Card(Ranks.KING, Suits.CLUBS),
+        Card(Ranks.QUEEN, Suits.CLUBS),
+        Card(Ranks.JACK, Suits.CLUBS),
+        Card(Ranks.TEN, Suits.CLUBS),
+        Card(Ranks.NINE, Suits.CLUBS)
+    ]
+    straight_flush = _straight_flush_draw(cards)
+    if ! expect(straight_flush, best_cards, desc="ERROR: match straight flush")
+        failing += 1
+    end
+    player = Player(0, Hole(0, Card(Ranks.ACE, Suits.SPADES), Card(Ranks.TEN, Suits.CLUBS)))
+    board = Board(Card(Ranks.KING, Suits.CLUBS), Card(Ranks.NINE, Suits.CLUBS), Card(Ranks.JACK, Suits.CLUBS), Card(Ranks.QUEEN, Suits.CLUBS), Card(Ranks.TEN, Suits.HEARTS))
+    hand = score(player, board)
+    best_hand = Hand(0, Rankings.SFLUSH, best_cards...)
+    if ! expect(hand, best_hand, desc="ERROR: score straight flush")
+        failing += 1
+    end
     return failing
 end
 
 function test_four_of_a_kind()
     failing = 0
+    cards = [
+        Card(Ranks.ACE, Suits.SPADES),
+        Card(Ranks.KING, Suits.SPADES),
+        Card(Ranks.KING, Suits.HEARTS),
+        Card(Ranks.KING, Suits.DIAMONDS),
+        Card(Ranks.KING, Suits.CLUBS),
+        Card(Ranks.QUEEN, Suits.CLUBS),
+        Card(Ranks.JACK, Suits.CLUBS),
+        Card(Ranks.TEN, Suits.CLUBS),
+        Card(Ranks.TEN, Suits.HEARTS),
+    ]
+    best_cards = [
+        Card(Ranks.KING, Suits.SPADES),
+        Card(Ranks.KING, Suits.HEARTS),
+        Card(Ranks.KING, Suits.DIAMONDS),
+        Card(Ranks.KING, Suits.CLUBS),
+        Card(Ranks.ACE, Suits.SPADES)
+    ]
+    quad = _quad_draw(cards)
+    if ! expect(quad, best_cards, desc="ERROR: match four-of-a-kind")
+        failing += 1
+    end
+    player = Player(0, Hole(0, Card(Ranks.KING, Suits.SPADES), Card(Ranks.KING, Suits.HEARTS)))
+    board = Board(Card(Ranks.KING, Suits.CLUBS), Card(Ranks.ACE, Suits.SPADES), Card(Ranks.JACK, Suits.CLUBS), Card(Ranks.QUEEN, Suits.CLUBS), Card(Ranks.KING, Suits.DIAMONDS))
+    hand = score(player, board)
+    best_hand = Hand(0, Rankings.QUAD, best_cards...)
+    if ! expect(hand, best_hand, desc="ERROR: score four-of-a-kind")
+        failing += 1
+    end
+
     return failing
 end
 
@@ -143,6 +203,8 @@ end
 function run_tests()
     failing = 0
     failing += test_royal_flush()
+    failing += test_straight_flush()
+    failing += test_four_of_a_kind()
     println("Done!")
     if failing == 0
         println("All tests passing!")
