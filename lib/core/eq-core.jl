@@ -96,21 +96,21 @@ mutable struct Hand
     card5::Card
 end
 
-function compare(h1::Hand, h2::Hand, tie_break=false)
+function compare(h1::Hand, h2::Hand; tie_break=false)
     if h1.ranking > h2.ranking
         1
     elseif h1.ranking < h2.ranking
         -1
-    elseif compare(h1.card1, h2.card1) != 0
-        compare(h1.card1, h2.card1)
-    elseif compare(h1.card2, h2.card2) != 0
-        compare(h1.card2, h2.card2)
-    elseif compare(h1.card3, h2.card3) != 0
-        compare(h1.card3, h2.card3)
-    elseif compare(h1.card4, h2.card4) != 0
-        compare(h1.card4, h2.card4)
-    elseif compare(h1.card5, h2.card5) != 0
-        compare(h1.card5, h2.card5)
+    elseif compare(h1.card1, h2.card1, tie_break=tie_break) != 0
+        compare(h1.card1, h2.card1, tie_break=tie_break)
+    elseif compare(h1.card2, h2.card2, tie_break=tie_break) != 0
+        compare(h1.card2, h2.card2, tie_break=tie_break)
+    elseif compare(h1.card3, h2.card3, tie_break=tie_break) != 0
+        compare(h1.card3, h2.card3, tie_break=tie_break)
+    elseif compare(h1.card4, h2.card4, tie_break) != 0
+        compare(h1.card4, h2.card4, tie_break)
+    elseif compare(h1.card5, h2.card5, tie_break) != 0
+        compare(h1.card5, h2.card5, tie_break)
     else
         0
     end

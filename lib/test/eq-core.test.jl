@@ -56,6 +56,38 @@ function test_compare()
     return failing
 end
 
+function test_compare_hand()
+    failing = 0
+    if ! expect(Rankings.ROYAL, Rankings.SFLUSH, 1, 1, desc="ERROR: ROYAL beats SFLUSH")
+        failing += 1
+    end
+    if ! expect(Rankings.SFLUSH, Rankings.QUAD, 1, 1, desc="ERROR: SFLUSH beats QUAD")
+        failing += 1
+    end
+    if ! expect(Rankings.QUAD, Rankings.FULL, 1, 1, desc="ERROR: QUAD beats FULL")
+        failing += 1
+    end
+    if ! expect(Rankings.FULL, Rankings.FLUSH, 1, 1, desc="ERROR: FULL beats FLUSH")
+        failing += 1
+    end
+    if ! expect(Rankings.FLUSH, Rankings.STRAIGHT, 1, 1, desc="ERROR: FLUSH beats STRAIGHT")
+        failing += 1
+    end
+    if ! expect(Rankings.STRAIGHT, Rankings.TRIP, 1, 1, desc="ERROR: STRAIGHT beats TRIP")
+        failing += 1
+    end
+    if ! expect(Rankings.TRIP, Rankings.DUBS, 1, 1, desc="ERROR: TRIP beats DUBS")
+        failing += 1
+    end
+    if ! expect(Rankings.DUBS, Rankings.PAIR, 1, 1, desc="ERROR: DUBS beats PAIR")
+        failing += 1
+    end
+    if ! expect(Rankings.PAIR, Rankings.HIGH, 1, 1, desc="ERROR: PAIR beats HIGH")
+        failing += 1
+    end
+    return failing
+end
+
 function expect(c1::Card, c2::Card, v1::Int, v2::Int; desc="")
     if ! (compare(c1, c2, tie_break=false) == v1 && compare(c1, c2, tie_break=true) == v2)
         println(desc)
@@ -68,9 +100,30 @@ function expect(c1::Card, c2::Card, v1::Int, v2::Int; desc="")
     return true
 end
 
+function expect(r1::Rankings.Ranking, r2::Rankings.Ranking, v1::Int, v2::Int; desc="")
+    if ! (compare(ranked_hand(r1), ranked_hand(r2), tie_break=false) == v1 && compare(ranked_hand(r1), ranked_hand(r2), tie_break=true) == v2)
+        println(desc)
+        return false
+    end
+    if ! (compare(ranked_hand(r2), ranked_hand(r1), tie_break=false) == v1*-1 && compare(ranked_hand(r2), ranked_hand(r1), tie_break=true) == v2*-1)
+        println(desc)
+        return false
+    end
+    return true
+end
+
+function ranked_hand(r::Rankings.Ranking)
+    return Hand(0, r, null_card(), null_card(), null_card(), null_card(), null_card())
+end
+
+function null_card()
+    return Card(Ranks.NULL, Suits.NULL)
+end
+
 function run_tests()
     failing = 0
     failing += test_compare()
+    failing += test_compare_hand()
     println("Done!")
     if failing == 0
         println("All tests passing!")
