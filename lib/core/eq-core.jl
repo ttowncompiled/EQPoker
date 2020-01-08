@@ -107,10 +107,10 @@ function compare(h1::Hand, h2::Hand; tie_break=false)
         compare(h1.card2, h2.card2, tie_break=tie_break)
     elseif compare(h1.card3, h2.card3, tie_break=tie_break) != 0
         compare(h1.card3, h2.card3, tie_break=tie_break)
-    elseif compare(h1.card4, h2.card4, tie_break) != 0
-        compare(h1.card4, h2.card4, tie_break)
-    elseif compare(h1.card5, h2.card5, tie_break) != 0
-        compare(h1.card5, h2.card5, tie_break)
+    elseif compare(h1.card4, h2.card4, tie_break=tie_break) != 0
+        compare(h1.card4, h2.card4, tie_break=tie_break)
+    elseif compare(h1.card5, h2.card5, tie_break=tie_break) != 0
+        compare(h1.card5, h2.card5, tie_break=tie_break)
     else
         0
     end

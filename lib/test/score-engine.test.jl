@@ -338,6 +338,86 @@ function test_high_card()
     return failing
 end
 
+function test_compare_hands()
+    failing = 0
+    board = Board(Card(Ranks.KING, Suits.HEARTS), Card(Ranks.QUEEN, Suits.HEARTS), Card(Ranks.JACK, Suits.HEARTS), Card(Ranks.TEN, Suits.HEARTS), Card(Ranks.TEN, Suits.CLUBS))
+    p1 = Player(1, Hole(1, Card(Ranks.ACE, Suits.HEARTS), Card(Ranks.TWO, Suits.CLUBS)))
+    p2 = Player(2, Hole(2, Card(Ranks.NINE, Suits.HEARTS), Card(Ranks.TWO, Suits.DIAMONDS)))
+    p3 = Player(3, Hole(3, Card(Ranks.TEN, Suits.DIAMONDS), Card(Ranks.TEN, Suits.SPADES)))
+    p4 = Player(4, Hole(4, Card(Ranks.KING, Suits.CLUBS), Card(Ranks.KING, Suits.SPADES)))
+    p5 = Player(5, Hole(5, Card(Ranks.TWO, Suits.HEARTS), Card(Ranks.THREE, Suits.CLUBS)))
+    p6 = Player(6, Hole(6, Card(Ranks.ACE, Suits.SPADES), Card(Ranks.THREE, Suits.SPADES)))
+    p7 = Player(7, Hole(7, Card(Ranks.TEN, Suits.SPADES), Card(Ranks.FOUR, Suits.SPADES)))
+    p8 = Player(8, Hole(8, Card(Ranks.JACK, Suits.SPADES), Card(Ranks.FOUR, Suits.CLUBS)))
+    p9 = Player(9, Hole(9, Card(Ranks.EIGHT, Suits.CLUBS), Card(Ranks.SEVEN, Suits.CLUBS)))
+    p10 = Player(10, Hole(10, Card(Ranks.FIVE, Suits.CLUBS), Card(Ranks.SIX, Suits.SPADES)))
+    p1_hand = score(p1, board)
+    p2_hand = score(p2, board)
+    p3_hand = score(p3, board)
+    p4_hand = score(p4, board)
+    p5_hand = score(p5, board)
+    p6_hand = score(p6, board)
+    p7_hand = score(p7, board)
+    p8_hand = score(p8, board)
+    p9_hand = score(p9, board)
+    p10_hand = score(p10, board)
+    begin
+        best_hands = compare_hands(p1_hand, p2_hand, p3_hand, p4_hand, p5_hand, p6_hand, p7_hand, p8_hand, p9_hand, p10_hand)
+        if ! expect(best_hands, [p1_hand], desc="ERROR: royal flush is best hand")
+            failing += 1
+        end
+    end
+    begin
+        best_hands = compare_hands(p2_hand, p3_hand, p4_hand, p5_hand, p6_hand, p7_hand, p8_hand, p9_hand, p10_hand)
+        if ! expect(best_hands, [p2_hand], desc="ERROR: straight flush is best hand")
+            failing += 1
+        end
+    end
+    begin
+        best_hands = compare_hands(p3_hand, p4_hand, p5_hand, p6_hand, p7_hand, p8_hand, p9_hand, p10_hand)
+        if ! expect(best_hands, [p3_hand], desc="ERROR: four-of-a-kind is best hand")
+            failing += 1
+        end
+    end
+    begin
+        best_hands = compare_hands(p4_hand, p5_hand, p6_hand, p7_hand, p8_hand, p9_hand, p10_hand)
+        if ! expect(best_hands, [p4_hand], desc="ERROR: full-house is best hand")
+            failing += 1
+        end
+    end
+    begin
+        best_hands = compare_hands(p5_hand, p6_hand, p7_hand, p8_hand, p9_hand, p10_hand)
+        if ! expect(best_hands, [p5_hand], desc="ERROR: flush is best hand")
+            failing += 1
+        end
+    end
+    begin
+        best_hands = compare_hands(p6_hand, p7_hand, p8_hand, p9_hand, p10_hand)
+        if ! expect(best_hands, [p6_hand], desc="ERROR: straight is best hand")
+            failing += 1
+        end
+    end
+    begin
+        best_hands = compare_hands(p7_hand, p8_hand, p9_hand, p10_hand)
+        if ! expect(best_hands, [p7_hand], desc="ERROR: three-of-a-kind is best hand")
+            failing += 1
+        end
+    end
+    begin
+        best_hands = compare_hands(p8_hand, p9_hand, p10_hand)
+        if ! expect(best_hands, [p8_hand], desc="ERROR: two-pair is best hand")
+            failing += 1
+        end
+    end
+    begin
+        best_hands = compare_hands(p9_hand, p10_hand)
+        if ! expect(best_hands, [p9_hand, p10_hand], desc="ERROR: tie hands")
+            failing += 1
+        end
+    end
+    return failing
+end
+
 function expect(cards::Array{Card}, exp::Array{Card}; desc="")
     if length(cards) != length(exp)
         println(desc)
@@ -394,6 +474,20 @@ function expect(hand::Nothing, exp::Hand; desc="")
     return false
 end
 
+function expect(best_hands::Array{Hand}, exp::Array{Hand}; desc="")
+    if length(best_hands) != length(exp)
+        println(desc)
+        return false
+    end
+    for i in 1:length(best_hands)
+        if best_hands[i].playerID != exp[i].playerID
+            println(desc)
+            return false
+        end
+    end
+    return true
+end
+
 function match(c1::Card, c2::Card)
     return c1.rank == c2.rank && c1.suit == c2.suit
 end
@@ -410,6 +504,7 @@ function run_tests()
     failing += test_two_pair()
     failing += test_pair()
     failing += test_high_card()
+    failing += test_compare_hands()
     println("Done!")
     if failing == 0
         println("All tests passing!")
