@@ -47,7 +47,7 @@ struct Card
     suit::Suits.Suit
 end
 
-function compare(c1::Card, c2::Card, tie_break=false)
+function compare(c1::Card, c2::Card; tie_break=false)
     if c1.rank > c2.rank
         1
     elseif c1.rank < c2.rank
