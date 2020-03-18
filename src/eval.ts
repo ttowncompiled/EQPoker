@@ -46,6 +46,39 @@ function eval_join(join: Join): Set<string> {
 }
 
 function eval_range_between(range_between: RangeBetween): Set<string> {
+    let start_join = range_between.start;
+    let end_join = range_between.end;
+    if (start_join.left.rank < end_join.left.rank) {
+        let tmp = start_join;
+        start_join = end_join;
+        end_join = tmp;
+    } else if (start_join.left.rank == end_join.left.rank && start_join.right.rank < end_join.right.rank) {
+        let tmp = start_join;
+        start_join = end_join;
+        end_join = tmp;
+    }
+    if (! (start_join.left.suit == end_join.left.suit && start_join.right.suit == end_join.right.suit)) {
+        return new Set<string>();
+    }
+    let hand_types = eval_join(start_join);
+    if (start_join.left.rank == start_join.right.rank && end_join.left.rank == end_join.right.rank) {
+        let rank = promote_rank(start_join.right.rank);
+        while (rank != null && rank >= end_join.right.rank) {
+            start_join.left.rank = rank;
+            start_join.right.rank = rank;
+            hand_types = merge_hands(hand_types, eval_join(start_join));
+            rank = promote_rank(start_join.right.rank);
+        }
+        return hand_types;
+    } else if (start_join.left.rank == end_join.left.rank && start_join.right.rank != end_join.right.rank) {
+        let rank = promote_rank(start_join.right.rank);
+        while (rank != null && rank >= end_join.right.rank) {
+            start_join.right.rank = rank;
+            hand_types = merge_hands(hand_types, eval_join(start_join));
+            rank = promote_rank(start_join.right.rank);
+        }
+        return hand_types;
+    }
     return new Set<string>();
 }
 
@@ -53,20 +86,20 @@ function eval_extension(extension: Extension): Set<string> {
     let join = extension.left;
     let hand_types = eval_join(join);
     if (join.left.rank == join.right.rank && join.left.suit == null && join.right.suit == null) {
-        let rank = increment_rank(join.right.rank);
+        let rank = promote_rank(join.right.rank);
         while (rank != null) {
             join.left.rank = rank;
             join.right.rank = rank;
             hand_types = merge_hands(hand_types, eval_join(join));
-            rank = increment_rank(join.right.rank);
+            rank = promote_rank(join.right.rank);
         }
         return hand_types;
     } else {
-        let right_rank = increment_rank(join.right.rank);
-        while (! (right_rank == null || right_rank == join.left.rank)) {
-            join.right.rank = right_rank;
+        let rank = promote_rank(join.right.rank);
+        while (! (rank == null || rank == join.left.rank)) {
+            join.right.rank = rank;
             hand_types = merge_hands(hand_types, eval_join(join));
-            right_rank = increment_rank(join.right.rank);
+            rank = promote_rank(join.right.rank);
         }
         return hand_types;
     }
@@ -139,7 +172,7 @@ function eval_card(card: Card): [string, string] {
     return [left_rank, left_suit];
 }
 
-function increment_rank(ttype: TokenType): TokenType | null {
+function promote_rank(ttype: TokenType): TokenType | null {
     switch (ttype) {
         case TokenType.King: return TokenType.Ace;
         case TokenType.Queen: return TokenType.King;

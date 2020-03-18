@@ -11,6 +11,11 @@ function main() {
     console.log(eval_input_range("AQo+"));
     console.log(eval_input_range("QQ+"));
     console.log(eval_input_range("AcQc+"));
+    console.log(eval_input_range("AJs-AKs"));
+    console.log(eval_input_range("AKs-AJs"));
+    console.log(eval_input_range("AKo-AJo"));
+    console.log(eval_input_range("AK-AJ"));
+    console.log(eval_input_range("AA-JJ"));
 }
 
 main();

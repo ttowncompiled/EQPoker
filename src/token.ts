@@ -1,5 +1,5 @@
 export enum TokenType {
-    Ace,
+    Ace = 1,
     King,
     Queen,
     Jack,
