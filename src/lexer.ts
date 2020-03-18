@@ -1,6 +1,6 @@
 import { Token, TokenType } from "./token"
 
-class Lexer {
+export class Lexer {
     private input: string;
     private input_pos: number;
     private line_number: number;
@@ -29,8 +29,11 @@ class Lexer {
             case '4': return { ttype: TokenType.Four, line_number: this.line_number, char_position: this.char_position };
             case '3': return { ttype: TokenType.Three, line_number: this.line_number, char_position: this.char_position };
             case '2': return { ttype: TokenType.Two, line_number: this.line_number, char_position: this.char_position };
+            case 'c': return { ttype: TokenType.Clubs, line_number: this.line_number, char_position: this.char_position };
+            case 'd': return { ttype: TokenType.Diamonds, line_number: this.line_number, char_position: this.char_position };
+            case 'h': return { ttype: TokenType.Hearts, line_number: this.line_number, char_position: this.char_position };
+            case 's': return { ttype: TokenType.SuitedOrSpades, line_number: this.line_number, char_position: this.char_position };
             case 'o': return { ttype: TokenType.Offsuit, line_number: this.line_number, char_position: this.char_position };
-            case 's': return { ttype: TokenType.Suited, line_number: this.line_number, char_position: this.char_position };
             case ',': return { ttype: TokenType.DelComma, line_number: this.line_number, char_position: this.char_position };
             case '+': return { ttype: TokenType.OpExtend, line_number: this.line_number, char_position: this.char_position };
             case '-': return { ttype: TokenType.OpRange, line_number: this.line_number, char_position: this.char_position };
