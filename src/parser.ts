@@ -21,12 +21,11 @@ export class Parser {
 
     public parse(): NodeType[] {
         let node_types: NodeType[] = [];
-        let curr_token = this.next_token();
-        while (curr_token.ttype != TokenType.MetaEnd) {
-            while (curr_token.ttype == TokenType.DelComma) {
-                curr_token = this.next_token();
+        while (this.peek_token.ttype != TokenType.MetaEnd) {
+            while (this.peek_token.ttype == TokenType.DelComma) {
+                this.next_token();
             }
-            let node_type = this.parse_expression_with_precedence(curr_token, Precedence.Lowest);
+            let node_type = this.parse_expression_with_precedence(this.next_token(), Precedence.Lowest);
             if (node_type != null) {
                 node_types.push(node_type);
             }
@@ -62,19 +61,19 @@ export class Parser {
 
     private do_prefix_parse_fn(curr_token: Token): Card | null {
         switch (curr_token.ttype) {
-            case TokenType.Ace: this.parse_prefix_expression(TokenType.Ace);
-            case TokenType.King: this.parse_prefix_expression(TokenType.King);
-            case TokenType.Queen: this.parse_prefix_expression(TokenType.Queen);
-            case TokenType.Jack: this.parse_prefix_expression(TokenType.Jack);
-            case TokenType.Ten: this.parse_prefix_expression(TokenType.Ten);
-            case TokenType.Nine: this.parse_prefix_expression(TokenType.Nine);
-            case TokenType.Eight: this.parse_prefix_expression(TokenType.Eight);
-            case TokenType.Seven: this.parse_prefix_expression(TokenType.Seven);
-            case TokenType.Six: this.parse_prefix_expression(TokenType.Six);
-            case TokenType.Five: this.parse_prefix_expression(TokenType.Five);
-            case TokenType.Four: this.parse_prefix_expression(TokenType.Four);
-            case TokenType.Three: this.parse_prefix_expression(TokenType.Three);
-            case TokenType.Two: this.parse_prefix_expression(TokenType.Two);
+            case TokenType.Ace: return this.parse_prefix_expression(TokenType.Ace);
+            case TokenType.King: return this.parse_prefix_expression(TokenType.King);
+            case TokenType.Queen: return this.parse_prefix_expression(TokenType.Queen);
+            case TokenType.Jack: return this.parse_prefix_expression(TokenType.Jack);
+            case TokenType.Ten: return this.parse_prefix_expression(TokenType.Ten);
+            case TokenType.Nine: return this.parse_prefix_expression(TokenType.Nine);
+            case TokenType.Eight: return this.parse_prefix_expression(TokenType.Eight);
+            case TokenType.Seven: return this.parse_prefix_expression(TokenType.Seven);
+            case TokenType.Six: return this.parse_prefix_expression(TokenType.Six);
+            case TokenType.Five: return this.parse_prefix_expression(TokenType.Five);
+            case TokenType.Four: return this.parse_prefix_expression(TokenType.Four);
+            case TokenType.Three: return this.parse_prefix_expression(TokenType.Three);
+            case TokenType.Two: return this.parse_prefix_expression(TokenType.Two);
             default: return null;
         }
     }

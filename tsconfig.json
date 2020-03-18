@@ -1,0 +1,19 @@
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "noImplicitAny": true,
+        "removeComments": true,
+        "preserveConstEnums": true,
+        "sourceMap": true,
+        "lib": ["ES6", "DOM"],
+        "downlevelIteration": true
+    },
+    "files": [
+        "src/ast.ts",
+        "src/eval.ts",
+        "src/lexer.ts",
+        "src/parser.ts",
+        "src/token.ts",
+        "main.ts"
+    ]
+}
