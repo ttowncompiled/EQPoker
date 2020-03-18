@@ -2,21 +2,21 @@ import { TokenType } from "./token"
 
 export type NodeType = Card | Join | RangeBetween | Extension;
 
-export type Card = {
+export interface Card {
     rank: TokenType;
     suit: TokenType | null;
 }
 
-export type Join = {
+export interface Join {
     left: Card;
     right: Card;
 }
 
-export type RangeBetween = {
+export interface RangeBetween {
     start: Join;
     end: Join;
 }
 
-export type Extension = {
+export interface Extension {
     left: Join;
 }

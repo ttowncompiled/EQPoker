@@ -19,12 +19,19 @@ export class Parser {
         this.peek_token = this.lexer.next_token();
     }
 
-    public parse(): NodeType | null {
+    public parse(): NodeType[] {
+        let node_types: NodeType[] = [];
         let curr_token = this.next_token();
-        if (curr_token.ttype == TokenType.DelComma || curr_token.ttype == TokenType.MetaEnd) {
-            return null;
+        while (curr_token.ttype != TokenType.MetaEnd) {
+            while (curr_token.ttype == TokenType.DelComma) {
+                curr_token = this.next_token();
+            }
+            let node_type = this.parse_expression_with_precedence(curr_token, Precedence.Lowest);
+            if (node_type != null) {
+                node_types.push(node_type);
+            }
         }
-        return this.parse_expression_with_precedence(curr_token, Precedence.Lowest);
+        return node_types;
     }
 
     private parse_expression_with_precedence(curr_token: Token, precedence: Precedence): NodeType | null {
